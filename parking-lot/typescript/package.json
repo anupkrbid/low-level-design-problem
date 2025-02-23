@@ -1,0 +1,46 @@
+{
+  "name": "parking-lot",
+  "version": "1.0.0",
+  "description": "Low Level Design of a Parking Lot using Typescript",
+  "main": "src/main.ts",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "build": "tsc",
+    "start": "tsc src/main.ts",
+    "package": "pkg dist/main.js --targets node18-win-x64,node18-win-arm64,node18-macos-x64,node18-macos-arm64,node18-linux-x64,node18-linux-arm64 --output dist/parking-lot"
+  },
+  "type": "module",
+  "bin": {
+    "yourfile": "./dist/main.js"
+  },
+  "pkg": {
+    "scripts": "dist/main.js",
+    "assets": [],
+    "targets": [
+      "node18-win-x64",
+      "node18-win-arm64",
+      "node18-macos-x64",
+      "node18-macos-arm64",
+      "node18-linux-x64",
+      "node18-linux-arm64"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anupkrbid/low-level-design-problems.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anupkrbid/low-level-design-problems/issues"
+  },
+  "homepage": "https://github.com/anupkrbid/low-level-design-problems#readme",
+  "dependencies": {
+    "typescript": "^5.7.3",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "pkg": "^5.8.1",
+    "tsx": "^4.19.3"
+  }
+}
