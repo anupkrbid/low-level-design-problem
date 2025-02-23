@@ -36,7 +36,8 @@
   },
   "homepage": "https://github.com/anupkrbid/low-level-design-problems#readme",
   "dependencies": {
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "pkg": "^5.8.1",
