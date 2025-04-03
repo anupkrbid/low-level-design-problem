@@ -1,5 +1,6 @@
 # Low Level Design Problems
 
-| Problems        | Code                                   |
-| --------------- | -------------------------------------- |
-| **Parking Lot** | [typescript](./parking-lot/typescript) |
+| Problems        | Solutions                                  |
+| --------------- | ------------------------------------------ |
+| **Parking Lot** | [typescript](./parking-lot/typescript/src) |
+| **Tic Tac Toe** | [typescript](./tic-tac-toe/typescript/src) |
