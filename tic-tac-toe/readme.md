@@ -102,7 +102,7 @@ Winner: Alice 🎉
 - Support **N players** (e.g., 4x4 board with 3 players)
 - Configurable **win length** (e.g., 4-in-a-row for 5x5 board)
 - AI player support (random / minimax)
-- **GUI using Swing/JavaFX** (if desired outside console)
+- **GUI** (if desired outside console)
 
 ---
 
