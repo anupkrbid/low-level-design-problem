@@ -1,18 +1,18 @@
 import { Nullable } from "../utils";
 
 export class WinChecker {
-  checkWin(grid: Nullable<string>[][], gridLength: number): boolean {
+  static findWinner(grid: string[][], gridLength: number): Nullable<string> {
     // Check rows
     for (let i = 0; i < gridLength; i++) {
       if (grid[i].every((cell) => cell === grid[i][0] && cell !== null)) {
-        return true;
+        return grid[i][0];
       }
     }
 
     // Check columns
     for (let i = 0; i < gridLength; i++) {
       if (grid.every((row) => row[i] === grid[0][i] && row[i] !== null)) {
-        return true;
+        return grid[0][i];
       }
     }
 
@@ -22,7 +22,7 @@ export class WinChecker {
         (row, index) => row[index] === grid[0][0] && row[index] !== null
       )
     ) {
-      return true;
+      return grid[0][0];
     }
     if (
       grid.every(
@@ -31,9 +31,9 @@ export class WinChecker {
           row[gridLength - 1 - index] !== null
       )
     ) {
-      return true;
+      return grid[0][gridLength - 1];
     }
 
-    return false;
+    return null;
   }
 }

@@ -1,4 +1,8 @@
+import { Nullable } from "../utils";
 import { Board } from "./board.class";
+import { BoardSetupState } from "./game-engine-state/board-setup-state.class";
+import { GameEngineState } from "./game-engine-state/game-engine-state.interface";
+import { Player } from "./player.class";
 
 export const GameResultState = {
   IN_PROGRESS: "IN_PROGRESS",
@@ -12,38 +16,69 @@ export type GameResultStateType =
 
 export class GameEngine {
   private board: Board;
-  private moves: [number, number, string][] = [];
-  private gameState: GameResultStateType = GameResultState.IN_PROGRESS;
+  private players: Player[] = [];
+  // private gameState: GameResultStateType = GameResultState.IN_PROGRESS;
 
-  //   private winner: string | null;
+  private currentState: GameEngineState;
+  private currentPlayer: Nullable<Player> = null;
 
-  //   constructor() {
-
-  //     this.currentPlayer = 'X';
-  //     this.winner = null;
-  //   }
-
-  setupBoard(boardSize: number = 3): void {
-    this.board = new Board(boardSize);
-    this.board.printBoard();
+  constructor() {
+    this.setGameState(new BoardSetupState(this));
   }
 
-  addPlayer(player: string): void {
-    this.board.addPlayer(player, symbol);
-    this.moves.push([this.board.getPlayerIndex(player), 0, symbol]);
-    this.board.printBoard();
+  getBoard(): Board {
+    return this.board;
   }
 
-  //   public makeMove(position: number): boolean {
-  //     if (this.board[position] || this.winner) {
-  //       return false; // Invalid move
-  //     }
-  //     this.board[position] = this.currentPlayer;
-  //     if (this.checkWinner()) {
-  //       this.winner = this.currentPlayer;
-  //     } else {
-  //       this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X';
-  //     }
-  //     return true;
-  //   }
+  setBoard(board: Board): void {
+    this.board = board;
+  }
+
+  setGameState(state: GameEngineState): void {
+    this.currentState = state;
+  }
+
+  resetPlayers(): void {
+    this.players = [];
+    this.currentPlayer = null;
+  }
+
+  setCurrentPlayer(player: Player): void {
+    this.currentPlayer = player;
+    console.log(
+      `${this.currentPlayer.getName()}'s turn [${this.currentPlayer.getSymbol()}]: Enter row and column: `
+    );
+  }
+
+  getCurrentPlayer(): Nullable<Player> {
+    return this.currentPlayer;
+  }
+
+  getPlayers(): Player[] {
+    return this.players;
+  }
+
+  initGame(boardSize: number): void {
+    this.currentState.initGame(boardSize);
+  }
+
+  addPlayer(playerName: string, symbol: string): void {
+    this.currentState.addPlayer(playerName, symbol);
+  }
+
+  startGame(): void {
+    this.currentState.startGame();
+  }
+
+  makeMove(row: number, col: number): void {
+    this.currentState.makeMove(row, col);
+  }
+
+  printBoard(): void {
+    this.currentState.printBoard();
+  }
+
+  resetGame(): void {
+    this.currentState.resetGame();
+  }
 }
