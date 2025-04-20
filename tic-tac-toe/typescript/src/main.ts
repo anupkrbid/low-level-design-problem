@@ -1,13 +1,61 @@
+import colors from "yoctocolors";
+import {
+  intro,
+  outro,
+  isCancel,
+  cancel,
+  log,
+  spinner,
+  text,
+} from "@clack/prompts";
 import { GameEngine } from "./models/game-engine.class";
-import { Player } from "./models/player.class";
 
-const gameName: string = "Tic Tac Toe";
-console.log(`Hello, ${gameName}!`);
+const sleep = (ms: number) =>
+  new Promise((resolve, reject) => setTimeout(resolve, ms));
 
-const gameEngine = new GameEngine();
-gameEngine.setupBoard(3);
+const s = spinner();
 
-const p1 = new Player("Player 1", "X");
-const p2 = new Player("Player 2", "O");
-// Example moves
-// gameEngine.makeMove(0);
+const game = new GameEngine();
+
+intro(`${colors.cyan("Welcome to Tic Tac Toe!")}`);
+
+const boardSize = await text({
+  message: "Initialize Board Size",
+  defaultValue: "3",
+  validate(value) {
+    if (!/^\d+$/.test(value) || parseInt(value, 10) <= 2) {
+      return "Please enter a valid number greater than 2!";
+    }
+  },
+});
+
+if (isCancel(boardSize)) {
+  cancel("Operation cancelled.");
+  process.exit(0);
+} else {
+  game.initGame(parseInt(boardSize, 10));
+}
+
+// s.start("Installing via npm");
+
+// await sleep(3000);
+// log.info(
+//   `${colors.yellow(
+//     "This is a simple Tic Tac Toe game implemented in TypeScript."
+//   )}`
+// );
+// s.stop("Installed via npm");
+// log.info(
+//   `${colors.yellow(
+//     "This is a simple Tic Tac Toe game implemented in TypeScript."
+//   )}`
+// );
+
+// s.start("Installing via npm");
+// await sleep(3000);
+
+// s.stop("Installed via npm");
+outro(`You're all set!`);
+function setTimeout(resolve: (value: unknown) => void, ms: number): void {
+  throw new Error("Function not implemented.");
+}

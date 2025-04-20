@@ -15,11 +15,11 @@ export type GameResultStateType =
   (typeof GameResultState)[keyof typeof GameResultState];
 
 export class GameEngine {
-  private board: Board;
+  private board!: Board;
   private players: Player[] = [];
   // private gameState: GameResultStateType = GameResultState.IN_PROGRESS;
 
-  private currentState: GameEngineState;
+  private currentState!: GameEngineState;
   private currentPlayer: Nullable<Player> = null;
 
   constructor() {
