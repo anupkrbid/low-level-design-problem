@@ -1,0 +1,32 @@
+{
+  "name": "online-auction-system",
+  "version": "1.0.0",
+  "description": "Low Level Design of an Online Auction System  using Typescript",
+  "main": "src/main.ts",
+  "scripts": {
+    "config:show": "tsc --showConfig",
+    "dev": "tsx watch src/main.ts",
+    "build": "tsc",
+    "start": "tsc && node dist/main.js"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anupkrbid/low-level-design-problems.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anupkrbid/low-level-design-problems/issues"
+  },
+  "homepage": "https://github.com/anupkrbid/low-level-design-problems#readme",
+  "dependencies": {
+    "@clack/prompts": "^0.10.1",
+    "typescript": "^5.7.3",
+    "yoctocolors": "^2.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.1",
+    "tsx": "^4.19.3"
+  }
+}
