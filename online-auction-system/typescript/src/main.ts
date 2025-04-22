@@ -5,7 +5,7 @@ console.log("Online Auction System");
 
 const onlineAuctionSystem = new OnlineAuctionSystem();
 
-// Safe, predefined methods
+// Predefined methods (make sure these methods exist on OnlineAuctionSystem)
 const methods = {
   ADD_BUYER: (name: string) => onlineAuctionSystem.addBuyer(name),
   ADD_SELLER: (name: string) => onlineAuctionSystem.addSeller(name),
@@ -35,15 +35,14 @@ const methods = {
     onlineAuctionSystem.getProfit(sellerName, auctionId),
 };
 
-// Basic parser for `method(arg1, arg2)`
+// Basic parser for `method(arg1, arg2)` pattern
 function parseInput(input: string) {
   const match = input.trim().match(/^(\w+)\((.*)\)$/);
   if (!match) return null;
-
   const [, methodName, argsString] = match;
   try {
     // Parse args as CSV, preserving strings/numbers
-    const args = eval(`[${argsString}]`); // Safer than full eval, but still needs care
+    const args = eval(`[${argsString}]`); // Use caution with eval
     return { methodName, args };
   } catch {
     return null;
@@ -58,25 +57,36 @@ const rl = readline.createInterface({
 });
 
 console.log(
-  'Custom Shell Ready. Try calling: add(2, 3), greet("Alice"), help()'
+  "Custom Shell Ready. Try calling one of the following methods:\n" +
+    'ADD_BUYER("Alice")\n' +
+    'ADD_SELLER("Bob")\n' +
+    'CREATE_AUCTION("auction1", 100, 200, 10, "Bob")\n' +
+    'CREATE_BID("Alice", "auction1", 150)\n' +
+    'UPDATE_BID("Alice", "auction1", 160)\n' +
+    'WITHDRAW_BID("Alice", "auction1")\n' +
+    'CLOSE_AUCTION("auction1")\n' +
+    'GET_PROFIT("Bob", "auction1")'
 );
 rl.prompt();
 
 rl.on("line", (line) => {
   const parsed = parseInput(line);
   if (!parsed) {
-    console.log("Invalid format. Use method(arg1, arg2)");
+    console.log("Invalid format. Use method(arg1, arg2, ...)");
     rl.prompt();
     return;
   }
 
-  const { methodName, args } = parsed;
+  const { methodName, args } = parsed as {
+    methodName: keyof typeof methods;
+    args: any[];
+  };
 
-  if (methods.hasOwnProperty(methodName)) {
+  if (methodName in methods) {
     try {
       const result = methods[methodName](...args);
       console.log(result);
-    } catch (err) {
+    } catch (err: any) {
       console.error(`Error: ${err.message}`);
     }
   } else {
