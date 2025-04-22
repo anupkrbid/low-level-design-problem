@@ -83,7 +83,7 @@ export class OnlineAuctionSystem {
     bidManager.withdrawBid(buyer);
   }
 
-  CLOSE_AUCTION(auctionId: string): void {
+  closeAuction(auctionId: string): void {
     const auction = this.auctions.find((a) => a.getId() === auctionId);
     if (!auction) {
       throw new Error(`Auction ${auctionId} not found`);
