@@ -1,3 +1,5 @@
+import { Bid } from "../interfaces/bid.interface";
+import { Nullable } from "../utils";
 import { Auction } from "./auction.class";
 import { User } from "./user.class";
 
@@ -83,12 +85,13 @@ export class OnlineAuctionSystem {
     bidManager.withdrawBid(buyer);
   }
 
-  closeAuction(auctionId: string): void {
+  closeAuction(auctionId: string): Nullable<Bid> {
     const auction = this.auctions.find((a) => a.getId() === auctionId);
     if (!auction) {
       throw new Error(`Auction ${auctionId} not found`);
     }
     auction.close();
+    return auction.getBidEvaluator().getWinningBid();
   }
 
   getProfit(sellerName: string, auctionId: string): number {
