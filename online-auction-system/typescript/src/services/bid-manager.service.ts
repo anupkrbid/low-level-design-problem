@@ -16,6 +16,10 @@ export class BidManagerService {
   }
 
   public createBid(user: User<"BUYER">, amount: number) {
+    if (!this.auction.isOpen()) {
+      throw new Error("Auction is closed.");
+    }
+
     if (this.bidMap.has(user)) {
       throw new Error("User has already placed a bid.");
     }
@@ -27,6 +31,10 @@ export class BidManagerService {
   }
 
   public updateBid(user: User<"BUYER">, amount: number) {
+    if (!this.auction.isOpen()) {
+      throw new Error("Auction is closed.");
+    }
+
     if (!this.bidMap.has(user)) {
       throw new Error("User has not placed a bid.");
     }
@@ -37,13 +45,17 @@ export class BidManagerService {
   }
 
   public withdrawBid(user: User<"BUYER">) {
+    if (!this.auction.isOpen()) {
+      throw new Error("Auction is closed.");
+    }
+
     if (!this.bidMap.has(user)) {
       throw new Error("User has not placed a bid.");
     }
     this.bidMap.delete(user);
   }
 
-  public isValidBid(bid: number): boolean {
+  private isValidBid(bid: number): boolean {
     return (
       bid >= this.auction.getLowestBid() && bid <= this.auction.getHighestBid()
     );

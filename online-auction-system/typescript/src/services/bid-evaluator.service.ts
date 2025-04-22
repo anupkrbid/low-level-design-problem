@@ -9,7 +9,7 @@ export class BidEvaluatorService {
     this.userParticipationManager =
       UserParticipationManagerService.getInstance();
   }
-  public findHighestBid(): Nullable<Bid> {
+  public getWinningBid(): Nullable<Bid> {
     const bids = this.bidManager.getBids();
     if (bids.length === 0) {
       return null;
