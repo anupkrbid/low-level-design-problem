@@ -1,20 +1,28 @@
-import { AuctionStatus } from "../enums/auction-status.enum";
-import { BidEvaluatorService } from "../services/bid-evaluator.service";
-import { BidManagerService } from "../services/bid-manager.service";
-import { ProfitCalculatorService } from "../services/profit-calculator.service";
-import { User } from "./user.class";
+import { AuctionStatus } from "../enums";
+import {
+  IAuction,
+  IBidManager,
+  IBidEvaluator,
+  IProfitCalculator,
+  IUser,
+} from "../interfaces";
+import {
+  BidManagerService,
+  BidEvaluatorService,
+  ProfitCalculatorService,
+} from "../services";
 
-export class Auction {
-  private bidManager: BidManagerService;
-  private bidEvaluator: BidEvaluatorService;
-  private profitCalculator: ProfitCalculatorService;
+export class Auction implements IAuction {
+  private bidManager: IBidManager;
+  private bidEvaluator: IBidEvaluator;
+  private profitCalculator: IProfitCalculator;
   private status: AuctionStatus = AuctionStatus.OPEN;
   constructor(
     private id: string,
     private lowestBid: number,
     private highestBid: number,
     private participationCost: number,
-    private seller: User<"SELLER">
+    private seller: IUser<"SELLER">
   ) {
     this.bidManager = new BidManagerService(this);
     this.bidEvaluator = new BidEvaluatorService(this.bidManager);
@@ -41,7 +49,7 @@ export class Auction {
     return this.status;
   }
 
-  getProfitCalculator(): ProfitCalculatorService {
+  getProfitCalculator(): IProfitCalculator {
     return this.profitCalculator;
   }
 
@@ -53,15 +61,15 @@ export class Auction {
     return this.status === AuctionStatus.OPEN;
   }
 
-  getSeller(): User<"SELLER"> {
+  getSeller(): IUser<"SELLER"> {
     return this.seller;
   }
 
-  getBidManager(): BidManagerService {
+  getBidManager(): IBidManager {
     return this.bidManager;
   }
 
-  getBidEvaluator(): BidEvaluatorService {
+  getBidEvaluator(): IBidEvaluator {
     return this.bidEvaluator;
   }
 }

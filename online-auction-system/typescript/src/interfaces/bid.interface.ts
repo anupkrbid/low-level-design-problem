@@ -1,6 +1,6 @@
-import { User } from "../models/user.class";
+import { IUser } from "./user.interface";
 
-export interface Bid {
-  user: User<"BUYER">;
+export interface IBid {
+  user: IUser<"BUYER">;
   amount: number;
 }

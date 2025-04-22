@@ -1,9 +1,13 @@
-import { Auction } from "../models/auction.class";
+import {
+  IAuction,
+  IProfitCalculator,
+  IUserParticipationManager,
+} from "../interfaces";
 import { UserParticipationManagerService } from "./user-participation-manager.service";
 
-export class ProfitCalculatorService {
-  private userParticipationManager: UserParticipationManagerService;
-  constructor(private auction: Auction) {
+export class ProfitCalculatorService implements IProfitCalculator {
+  private userParticipationManager: IUserParticipationManager;
+  constructor(private auction: IAuction) {
     this.userParticipationManager =
       UserParticipationManagerService.getInstance();
   }

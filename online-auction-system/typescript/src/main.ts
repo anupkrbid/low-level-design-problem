@@ -1,6 +1,6 @@
 import readline from "readline";
 import color from "yoctocolors";
-import { OnlineAuctionSystem } from "./models/online-auction-system.class";
+import { OnlineAuctionSystem } from "./models";
 
 console.log(color.bold(color.cyan("Online Auction System")));
 console.log(color.gray("----------------------------------------"));

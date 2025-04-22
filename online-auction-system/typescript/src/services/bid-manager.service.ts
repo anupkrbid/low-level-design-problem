@@ -1,21 +1,25 @@
-import { Bid } from "../interfaces/bid.interface";
-import { Auction } from "../models/auction.class";
-import { User } from "../models/user.class";
+import {
+  IAuction,
+  IBidManager,
+  IUser,
+  IBid,
+  IUserParticipationManager,
+} from "../interfaces";
 import { UserParticipationManagerService } from "./user-participation-manager.service";
 
-export class BidManagerService {
-  private bidMap = new Map<User<"BUYER">, Bid>();
-  private userParticipationManager: UserParticipationManagerService;
-  constructor(private auction: Auction) {
+export class BidManagerService implements IBidManager {
+  private bidMap = new Map<IUser<"BUYER">, IBid>();
+  private userParticipationManager: IUserParticipationManager;
+  constructor(private auction: IAuction) {
     this.userParticipationManager =
       UserParticipationManagerService.getInstance();
   }
 
-  public getBids(): Bid[] {
+  public getBids(): IBid[] {
     return Array.from(this.bidMap.values());
   }
 
-  public createBid(user: User<"BUYER">, amount: number) {
+  public createBid(user: IUser<"BUYER">, amount: number) {
     if (!this.auction.isOpen()) {
       throw new Error("Auction is closed.");
     }
@@ -30,7 +34,7 @@ export class BidManagerService {
     this.userParticipationManager.registerUser(user, this.auction);
   }
 
-  public updateBid(user: User<"BUYER">, amount: number) {
+  public updateBid(user: IUser<"BUYER">, amount: number) {
     if (!this.auction.isOpen()) {
       throw new Error("Auction is closed.");
     }
@@ -44,7 +48,7 @@ export class BidManagerService {
     this.bidMap.set(user, { user, amount });
   }
 
-  public withdrawBid(user: User<"BUYER">) {
+  public withdrawBid(user: IUser<"BUYER">) {
     if (!this.auction.isOpen()) {
       throw new Error("Auction is closed.");
     }

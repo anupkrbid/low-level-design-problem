@@ -1,12 +1,12 @@
-import { Bid } from "../interfaces/bid.interface";
+import { IAuction, IBid, IUser } from "../interfaces";
 import { Nullable } from "../utils";
 import { Auction } from "./auction.class";
 import { User } from "./user.class";
 
 export class OnlineAuctionSystem {
-  private auctions: Auction[] = [];
-  private sellers: User<"SELLER">[] = [];
-  private buyers: User<"BUYER">[] = [];
+  private auctions: IAuction[] = [];
+  private sellers: IUser<"SELLER">[] = [];
+  private buyers: IUser<"BUYER">[] = [];
 
   constructor() {}
 
@@ -85,7 +85,7 @@ export class OnlineAuctionSystem {
     bidManager.withdrawBid(buyer);
   }
 
-  closeAuction(auctionId: string): Nullable<Bid> {
+  closeAuction(auctionId: string): Nullable<IBid> {
     const auction = this.auctions.find((a) => a.getId() === auctionId);
     if (!auction) {
       throw new Error(`Auction ${auctionId} not found`);

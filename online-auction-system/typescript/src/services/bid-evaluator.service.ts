@@ -1,15 +1,19 @@
-import { Bid } from "../interfaces/bid.interface";
 import { Nullable } from "../utils";
-import { BidManagerService } from "./bid-manager.service";
 import { UserParticipationManagerService } from "./user-participation-manager.service";
+import {
+  IBid,
+  IBidEvaluator,
+  IBidManager,
+  IUserParticipationManager,
+} from "../interfaces";
 
-export class BidEvaluatorService {
-  private userParticipationManager: UserParticipationManagerService;
-  constructor(private bidManager: BidManagerService) {
+export class BidEvaluatorService implements IBidEvaluator {
+  private userParticipationManager: IUserParticipationManager;
+  constructor(private bidManager: IBidManager) {
     this.userParticipationManager =
       UserParticipationManagerService.getInstance();
   }
-  public getWinningBid(): Nullable<Bid> {
+  public getWinningBid(): Nullable<IBid> {
     const bids = this.bidManager.getBids();
     if (bids.length === 0) {
       return null;
