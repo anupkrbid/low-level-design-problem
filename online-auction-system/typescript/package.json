@@ -5,10 +5,10 @@
   "main": "src/main.ts",
   "scripts": {
     "config:show": "tsc --showConfig",
-    "debug": "tsc --watch --diagnostics src/main.ts",
-    "dev": "tsc --watch src/main.ts",
+    "debug": "tsc --watch --diagnostics",
+    "dev": "tsc --watch",
     "build": "tsc -p tsconfig.json",
-    "start": "tsc -p tsconfig.json && node ./dist/main.js"
+    "start": "npm run build && node --experimental-specifier-resolution=node ./dist/main.js"
   },
   "type": "module",
   "repository": {
