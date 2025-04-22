@@ -5,7 +5,8 @@
   "main": "src/main.ts",
   "scripts": {
     "config:show": "tsc --showConfig",
-    "dev": "tsx watch src/main.ts",
+    "debug": "tsc --watch --diagnostics src/main.ts",
+    "dev": "tsc --watch src/main.ts",
     "build": "tsc",
     "start": "tsc && node dist/main.js"
   },

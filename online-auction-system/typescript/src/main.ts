@@ -1,4 +1,4 @@
-import readline from "node:readline";
+import * as readline from "readline";
 import { OnlineAuctionSystem } from "./models/online-auction-system.class";
 
 console.log("Online Auction System");
@@ -82,9 +82,11 @@ rl.on("line", (line) => {
     args: any[];
   };
 
+  const method = methods[methodName] as (...args: any[]) => any;
+
   if (methodName in methods) {
     try {
-      const result = methods[methodName](...args);
+      const result = method.apply(null, args);
       console.log(result);
     } catch (err: any) {
       console.error(`Error: ${err.message}`);
