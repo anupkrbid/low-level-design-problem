@@ -9,35 +9,84 @@ const onlineAuctionSystem = new OnlineAuctionSystem();
 
 // Predefined methods (make sure these methods exist on OnlineAuctionSystem)
 const methods = {
-  ADD_BUYER: (name: string) => onlineAuctionSystem.addBuyer(name),
-  ADD_SELLER: (name: string) => onlineAuctionSystem.addSeller(name),
+  ADD_BUYER: (name: string) => {
+    onlineAuctionSystem.addBuyer(name);
+    console.log(
+      color.green("✓ ") + color.bold(color.green("Buyer added successfully"))
+    );
+  },
+  ADD_SELLER: (name: string) => {
+    onlineAuctionSystem.addSeller(name);
+    console.log(
+      color.green("✓ ") + color.bold(color.green("Seller added successfully"))
+    );
+  },
   CREATE_AUCTION: (
     id: string,
     lowestBid: number,
     highestBid: number,
     participationCost: number,
     sellerName: string
-  ) =>
+  ) => {
     onlineAuctionSystem.createAuction(
       id,
       lowestBid,
       highestBid,
       participationCost,
       sellerName
-    ),
-  CREATE_BID: (buyerName: string, auctionId: string, bidAmount: number) =>
-    onlineAuctionSystem.createBid(buyerName, auctionId, bidAmount),
-  UPDATE_BID: (buyerName: string, auctionId: string, newBidAmount: number) =>
-    onlineAuctionSystem.updateBid(buyerName, auctionId, newBidAmount),
-  WITHDRAW_BID: (buyerName: string, auctionId: string) =>
-    onlineAuctionSystem.withdrawBid(buyerName, auctionId),
-  CLOSE_AUCTION: (auctionId: string) =>
-    onlineAuctionSystem.closeAuction(auctionId),
-  GET_PROFIT: (sellerName: string, auctionId: string) =>
-    onlineAuctionSystem.getProfit(sellerName, auctionId),
+    );
+    console.log(
+      color.green("✓ ") +
+        color.bold(color.green("Auction created successfully"))
+    );
+  },
+  CREATE_BID: (buyerName: string, auctionId: string, bidAmount: number) => {
+    onlineAuctionSystem.createBid(buyerName, auctionId, bidAmount);
+    console.log(
+      color.green("✓ ") + color.bold(color.green("Bid created successfully"))
+    );
+  },
+  UPDATE_BID: (buyerName: string, auctionId: string, newBidAmount: number) => {
+    onlineAuctionSystem.updateBid(buyerName, auctionId, newBidAmount);
+    console.log(
+      color.green("✓ ") + color.bold(color.green("Bid updated successfully"))
+    );
+  },
+  WITHDRAW_BID: (buyerName: string, auctionId: string) => {
+    onlineAuctionSystem.withdrawBid(buyerName, auctionId);
+    console.log(
+      color.green("✓ ") + color.bold(color.green("Bid withdrawn successfully"))
+    );
+  },
+  CLOSE_AUCTION: (auctionId: string) => {
+    const winningBid = onlineAuctionSystem.closeAuction(auctionId);
+    if (!winningBid) {
+      console.log(color.yellow("→ ") + color.bold("No winner"));
+    } else {
+      console.log(
+        color.cyan("→ ") +
+          color.bold("Winner: ") +
+          color.yellow(
+            `${winningBid.user.getName()} (${
+              winningBid.amount
+            } is highest unique bid)`
+          )
+      );
+    }
+  },
+  GET_PROFIT: (sellerName: string, auctionId: string) => {
+    const result = onlineAuctionSystem.getProfit(sellerName, auctionId);
+    console.log(
+      color.cyan("→ ") +
+        color.bold("Profit/Loss ") +
+        (result >= 0
+          ? color.green(result.toString())
+          : color.red(result.toString()))
+    );
+  },
   EXIT: () => {
+    console.log(color.yellow("Exiting. Goodbye! 👋"));
     console.log(color.gray("----------------------------------------"));
-    console.log(color.cyan("Exiting. Goodbye! 👋"));
     process.exit(0);
   },
 };
@@ -121,58 +170,23 @@ rl.on("line", (line) => {
 
   if (methodName in methods) {
     try {
-      const result = method.apply(null, args);
-      console.log(color.green("✓ ") + color.bold(color.green("Success!")));
-
-      if (methodName === "CLOSE_AUCTION") {
-        const auction = onlineAuctionSystem["auctions"].find(
-          (a) => a.getId() === args[0]
-        );
-        if (auction) {
-          const winningBid = auction.getBidEvaluator().getWinningBid();
-          if (winningBid) {
-            console.log(
-              color.cyan("→ ") +
-                color.bold("Winner: ") +
-                color.yellow(
-                  `${winningBid.user.getName()} (${
-                    winningBid.amount
-                  } is highest unique bid)`
-                )
-            );
-          } else {
-            console.log(color.cyan("→ ") + color.bold("No winner"));
-          }
-          const profit = auction.getProfitCalculator().calculateProfit();
-          console.log(
-            color.cyan("→ ") +
-              color.bold("Profit/Loss ") +
-              (profit >= 0
-                ? color.green(profit.toString())
-                : color.red(profit.toString()))
-          );
-        }
-      } else if (result !== undefined) {
-        console.log(color.gray("Result: ") + color.yellow(result));
-      } else if (successMessages[methodName]) {
-        console.log(color.gray(successMessages[methodName]));
-      }
+      method.apply(null, args);
 
       console.log(color.gray("----------------------------------------"));
     } catch (err: any) {
-      console.log(color.red("✗ ") + color.bold(color.red("Error:")));
-      console.log(color.red(err.message));
+      console.log(color.red("✗ ") + color.bold(color.red(err.message)));
       console.log(color.gray("----------------------------------------"));
     }
   } else {
-    console.log(color.red("✗ ") + color.bold(color.red("Unknown method:")));
-    console.log(color.red(methodName));
-    console.log(color.gray("----------------------------------------"));
+    console.log(
+      color.red("✗ ") +
+        color.bold(color.red("Unknown Method: ") + color.red(methodName))
+    );
   }
 
   rl.prompt();
 }).on("close", () => {
+  console.log(color.yellow("Exiting. Goodbye! 👋"));
   console.log(color.gray("----------------------------------------"));
-  console.log(color.cyan("Exiting. Goodbye! 👋"));
   process.exit(0);
 });

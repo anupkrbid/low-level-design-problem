@@ -11,10 +11,18 @@ export class OnlineAuctionSystem {
   constructor() {}
 
   public addBuyer(name: string): void {
+    const existingBuyer = this.buyers.find((b) => b.getName() === name);
+    if (existingBuyer) {
+      throw new Error(`Buyer ${name} already exists`);
+    }
     this.buyers.push(new User<"BUYER">(name, "BUYER"));
   }
 
   public addSeller(name: string): void {
+    const existingSeller = this.sellers.find((s) => s.getName() === name);
+    if (existingSeller) {
+      throw new Error(`Seller ${name} already exists`);
+    }
     this.sellers.push(new User<"SELLER">(name, "SELLER"));
   }
 
@@ -25,8 +33,8 @@ export class OnlineAuctionSystem {
     participationCost: number,
     sellerName: string
   ): void {
-    const seller = this.sellers.find((s) => s.getName() === sellerName);
-    if (!seller) {
+    const existingSeller = this.sellers.find((s) => s.getName() === sellerName);
+    if (!existingSeller) {
       throw new Error(`Seller ${sellerName} not found`);
     }
     const auction = new Auction(
@@ -34,7 +42,7 @@ export class OnlineAuctionSystem {
       lowestBid,
       highestBid,
       participationCost,
-      seller
+      existingSeller
     );
     this.auctions.push(auction);
   }
@@ -43,16 +51,16 @@ export class OnlineAuctionSystem {
     auctionId: string,
     bidAmount: number
   ): void {
-    const buyer = this.buyers.find((b) => b.getName() === buyerName);
-    if (!buyer) {
+    const existingBuyer = this.buyers.find((b) => b.getName() === buyerName);
+    if (!existingBuyer) {
       throw new Error(`Buyer ${buyerName} not found`);
     }
     const auction = this.auctions.find((a) => a.getId() === auctionId);
     if (!auction) {
-      throw new Error(`Auction ${auctionId} not found`);
+      throw new Error(`AuctionId ${auctionId} not found`);
     }
     const bidManager = auction.getBidManager();
-    bidManager.createBid(buyer, bidAmount);
+    bidManager.createBid(existingBuyer, bidAmount);
   }
 
   public updateBid(
@@ -60,46 +68,46 @@ export class OnlineAuctionSystem {
     auctionId: string,
     bidAmount: number
   ): void {
-    const buyer = this.buyers.find((b) => b.getName() === buyerName);
-    if (!buyer) {
+    const existingBuyer = this.buyers.find((b) => b.getName() === buyerName);
+    if (!existingBuyer) {
       throw new Error(`Buyer ${buyerName} not found`);
     }
     const auction = this.auctions.find((a) => a.getId() === auctionId);
     if (!auction) {
-      throw new Error(`Auction ${auctionId} not found`);
+      throw new Error(`AuctionId ${auctionId} not found`);
     }
     const bidManager = auction.getBidManager();
-    bidManager.updateBid(buyer, bidAmount);
+    bidManager.updateBid(existingBuyer, bidAmount);
   }
 
   withdrawBid(buyerName: string, auctionId: string): void {
-    const buyer = this.buyers.find((b) => b.getName() === buyerName);
-    if (!buyer) {
+    const existingBuyer = this.buyers.find((b) => b.getName() === buyerName);
+    if (!existingBuyer) {
       throw new Error(`Buyer ${buyerName} not found`);
     }
     const auction = this.auctions.find((a) => a.getId() === auctionId);
     if (!auction) {
-      throw new Error(`Auction ${auctionId} not found`);
+      throw new Error(`AuctionId ${auctionId} not found`);
     }
     const bidManager = auction.getBidManager();
-    bidManager.withdrawBid(buyer);
+    bidManager.withdrawBid(existingBuyer);
   }
 
   closeAuction(auctionId: string): Nullable<IBid> {
-    const auction = this.auctions.find((a) => a.getId() === auctionId);
-    if (!auction) {
-      throw new Error(`Auction ${auctionId} not found`);
+    const existingAuction = this.auctions.find((a) => a.getId() === auctionId);
+    if (!existingAuction) {
+      throw new Error(`AuctionId ${auctionId} not found`);
     }
-    auction.close();
-    return auction.getBidEvaluator().getWinningBid();
+    existingAuction.close();
+    return existingAuction.getBidEvaluator().getWinningBid();
   }
 
   getProfit(sellerName: string, auctionId: string): number {
-    const auction = this.auctions.find((a) => a.getId() === auctionId);
-    if (!auction) {
-      throw new Error(`Auction ${auctionId} not found`);
+    const existingAuction = this.auctions.find((a) => a.getId() === auctionId);
+    if (!existingAuction) {
+      throw new Error(`AuctionId ${auctionId} not found`);
     }
 
-    return auction.getProfitCalculator().calculateProfit();
+    return existingAuction.getProfitCalculator().calculateProfit();
   }
 }
